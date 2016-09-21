@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 
+// 启动测试的命令行, 关于destination的参数部分，都是使用key-value,每哥key pair之间不能有空格
+// xcodebuild test -project XCTestDemo.xcodeproj -scheme XCTestDemo -destination 'platform=iOS Simulator,OS=10.0,name=iPhone 7 Plus'
 @interface XCTestDemoUITests : XCTestCase {
     @private
     ViewController *vc;
