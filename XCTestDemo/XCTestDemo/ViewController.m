@@ -19,8 +19,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame     = CGRectMake(10, 80, 100, 44);
+    [button setTitle:@"MyButton" forState:UIControlStateNormal];
+    [button setIsAccessibilityElement:YES];
+    button.accessibilityIdentifier = @"MButton";
+    [button addTarget:self action:@selector(changeTitle:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
+
+- (void)changeTitle:(UIButton *)sender {
+    self.navigationItem.title = @"My";
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

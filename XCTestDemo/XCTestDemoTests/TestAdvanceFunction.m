@@ -41,6 +41,9 @@
 
 - (void)testM2 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
+    [self waitForExpectationsWithTimeout:12 handler:^(NSError * _Nullable error) {
+        //
+    }];
 }
 
 - (void)testPerformanceExample {
