@@ -10,6 +10,14 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 
+
+
+
+
+
+
+
+
 // 启动测试的命令行, 关于destination的参数部分，都是使用key-value,每哥key pair之间不能有空格
 // xcodebuild test -project XCTestDemo.xcodeproj -scheme XCTestDemo -destination 'platform=iOS Simulator,OS=10.0,name=iPhone 7 Plus'
 @interface XCTestDemoUITests : XCTestCase {
@@ -33,7 +41,34 @@
 //    [[XCUIApplication new] terminate];
     // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     
+    XCTestSuite *testSuite = [XCTestDemoUITests defaultTestSuite];
+    NSUInteger count = testSuite.tests.count;
+    for (int i = 0; i < count; ++i) {
+        XCTest *test = testSuite.tests[i];
+        NSLog(@"Test case count:%ld", test.testCaseCount);
+        NSLog(@"Test name:%@", test.name);
+        if (i == 2) {
+            XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
+//            [testRun start];
+//            [test runTest];
+            [test performTest:testRun];
+        }
+    }
+ 
     
+    
+    XCTestSuite *customTestSuite = [[XCTestSuite alloc] initWithName:@"MyTestSuite"];
+    [customTestSuite addTest:testSuite.tests[3]];
+    
+    for (int i = 0; i < customTestSuite.tests.count; ++i) {
+        XCTest *test = testSuite.tests[i];
+        NSLog(@"Test case count:%ld", test.testCaseCount);
+        NSLog(@"Test name:%@", test.name);
+        XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
+        [testRun start];
+        //            [test performTest:testRun];
+        [testRun stop];
+    }
 }
 
 - (void)tearDown {
@@ -202,15 +237,22 @@
 - (void)testPressDeviceButton {
     XCUIDevice *device = [XCUIDevice sharedDevice];
     NSLog(@"Device orientaion:%ld", device.orientation);
+    
+#if TARGET_OS_SIMULATOR
+#else
     int x = 0;
     while (x < 100) {
         
-//        [device pressButton:XCUIDeviceButtonVolumeUp];
-//        [device pressButton:XCUIDeviceButtonVolumeDown];
+        [device pressButton:XCUIDeviceButtonVolumeUp];
+        [device pressButton:XCUIDeviceButtonVolumeDown];
         ++x;
     }
+#endif
     
     [device pressButton:XCUIDeviceButtonHome];
+    
+    
+    
 }
 
 - (void)testSubViewButton {
