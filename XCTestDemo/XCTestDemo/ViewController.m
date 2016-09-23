@@ -8,7 +8,8 @@
 
 #import "ViewController.h"
 #import "SigninViewController.h"
-@interface ViewController ()
+#define kTabelCellID @"CellID"
+@interface ViewController ()<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextfield;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextfield;
 
@@ -27,11 +28,48 @@
     button.accessibilityIdentifier = @"MButton";
     [button addTarget:self action:@selector(changeTitle:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+    
+    
+    
+    UIView *subView = [[UIView alloc] initWithFrame:CGRectMake(110, 80, self.view.bounds.size.width-110, 60)];
+    subView.backgroundColor = [UIColor lightGrayColor];
+    [self.view addSubview:subView];
+    
+    UIButton *subViewButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    subViewButton.frame     = CGRectMake(0, 0, 60, 44);
+    [subViewButton setTitle:@"SubBtn" forState:UIControlStateNormal];
+    [subViewButton setIsAccessibilityElement:YES];
+    subViewButton.accessibilityIdentifier = @"SubButton";
+    [subViewButton addTarget:self action:@selector(changeSubTitle:) forControlEvents:UIControlEventTouchUpInside];
+    [subView addSubview:subViewButton];
+    
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 110, 100, 50)];
+    scrollView.delegate = self;
+    scrollView.contentSize = CGSizeMake(100, 500);
+    [scrollView setIsAccessibilityElement:YES];
+    scrollView.accessibilityIdentifier = @"MyScrollView";
+    scrollView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:scrollView];
+    
+    
+    
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - 64)/2 + 60, self.view.bounds.size.width, (self.view.bounds.size.height/2) + 60) style:(UITableViewStylePlain)];
+    [table registerClass:[UITableViewCell class] forCellReuseIdentifier:kTabelCellID];
+    table.accessibilityIdentifier = @"MyTable";
+    table.delegate = self;
+    table.dataSource = self;
+    
+    [self.view addSubview:table];
 }
 
 
 - (void)changeTitle:(UIButton *)sender {
     self.navigationItem.title = @"My";
+}
+
+- (void)changeSubTitle:(UIButton *)sender {
+    self.navigationItem.title = @"subView";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -57,6 +95,32 @@
         [self performSegueWithIdentifier:@"ShowTimesPage" sender:nil];
         
     }
+}
+
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"%s", __FUNCTION__);
+}
+
+#pragma mark - UITable
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 100;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kTabelCellID forIndexPath:indexPath];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kTabelCellID];
+    }
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row];
+    
+    return cell;
 }
 
 @end
