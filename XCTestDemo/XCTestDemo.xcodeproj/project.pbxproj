@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C268E36E1D98B5C7000CA22F /* bundle.plist in Resources */ = {isa = PBXBuildFile; fileRef = C268E36D1D98B5C7000CA22F /* bundle.plist */; };
 		C29D33961D92288500C78256 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33951D92288500C78256 /* main.m */; };
 		C29D33991D92288500C78256 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33981D92288500C78256 /* AppDelegate.m */; };
 		C29D339C1D92288500C78256 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D339B1D92288500C78256 /* ViewController.m */; };
@@ -15,7 +16,6 @@
 		C29D33A41D92288500C78256 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C29D33A21D92288500C78256 /* LaunchScreen.storyboard */; };
 		C29D33AF1D92288500C78256 /* XCTestDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33AE1D92288500C78256 /* XCTestDemoTests.m */; };
 		C29D33BA1D92288500C78256 /* XCTestDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33B91D92288500C78256 /* XCTestDemoUITests.m */; };
-		C29D33C81D9232D000C78256 /* TestAdvanceFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33C71D9232D000C78256 /* TestAdvanceFunction.m */; };
 		C29D33CB1D926F9200C78256 /* SigninViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C29D33CA1D926F9200C78256 /* SigninViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C268E36D1D98B5C7000CA22F /* bundle.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = bundle.plist; sourceTree = "<group>"; };
 		C29D33911D92288500C78256 /* XCTestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XCTestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C29D33951D92288500C78256 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C29D33971D92288500C78256 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,7 +54,6 @@
 		C29D33B51D92288500C78256 /* XCTestDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XCTestDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C29D33B91D92288500C78256 /* XCTestDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XCTestDemoUITests.m; sourceTree = "<group>"; };
 		C29D33BB1D92288500C78256 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C29D33C71D9232D000C78256 /* TestAdvanceFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAdvanceFunction.m; sourceTree = "<group>"; };
 		C29D33C91D926F9200C78256 /* SigninViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigninViewController.h; sourceTree = "<group>"; };
 		C29D33CA1D926F9200C78256 /* SigninViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SigninViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +117,7 @@
 				C29D33A21D92288500C78256 /* LaunchScreen.storyboard */,
 				C29D33A51D92288500C78256 /* Info.plist */,
 				C29D33941D92288500C78256 /* Supporting Files */,
+				C268E36D1D98B5C7000CA22F /* bundle.plist */,
 			);
 			path = XCTestDemo;
 			sourceTree = "<group>";
@@ -132,7 +133,6 @@
 		C29D33AD1D92288500C78256 /* XCTestDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				C29D33C71D9232D000C78256 /* TestAdvanceFunction.m */,
 				C29D33AE1D92288500C78256 /* XCTestDemoTests.m */,
 				C29D33B01D92288500C78256 /* Info.plist */,
 			);
@@ -257,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C268E36E1D98B5C7000CA22F /* bundle.plist in Resources */,
 				C29D33A41D92288500C78256 /* LaunchScreen.storyboard in Resources */,
 				C29D33A11D92288500C78256 /* Assets.xcassets in Resources */,
 				C29D339F1D92288500C78256 /* Main.storyboard in Resources */,
@@ -295,7 +296,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C29D33C81D9232D000C78256 /* TestAdvanceFunction.m in Sources */,
 				C29D33AF1D92288500C78256 /* XCTestDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

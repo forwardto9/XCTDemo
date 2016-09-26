@@ -11,13 +11,6 @@
 #import "ViewController.h"
 
 
-
-
-
-
-
-
-
 // 启动测试的命令行, 关于destination的参数部分，都是使用key-value,每哥key pair之间不能有空格
 // xcodebuild test -project XCTestDemo.xcodeproj -scheme XCTestDemo -destination 'platform=iOS Simulator,OS=10.0,name=iPhone 7 Plus'
 @interface XCTestDemoUITests : XCTestCase {
@@ -38,37 +31,29 @@
     // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
     XCUIApplication *app = [[XCUIApplication alloc] init];
     [app launch];
+    
 //    [[XCUIApplication new] terminate];
     // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     
-    XCTestSuite *testSuite = [XCTestDemoUITests defaultTestSuite];
-    NSUInteger count = testSuite.tests.count;
-    for (int i = 0; i < count; ++i) {
-        XCTest *test = testSuite.tests[i];
-        NSLog(@"Test case count:%ld", test.testCaseCount);
-        NSLog(@"Test name:%@", test.name);
-        if (i == 2) {
-            XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
-//            [testRun start];
-//            [test runTest];
-            [test performTest:testRun];
-        }
-    }
- 
-    
-    
-    XCTestSuite *customTestSuite = [[XCTestSuite alloc] initWithName:@"MyTestSuite"];
-    [customTestSuite addTest:testSuite.tests[3]];
-    
-    for (int i = 0; i < customTestSuite.tests.count; ++i) {
-        XCTest *test = testSuite.tests[i];
-        NSLog(@"Test case count:%ld", test.testCaseCount);
-        NSLog(@"Test name:%@", test.name);
-        XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
-        [testRun start];
-        //            [test performTest:testRun];
-        [testRun stop];
-    }
+    // suggest this part to be added into unit test
+//    XCTestSuite *testSuite = [XCTestDemoUITests defaultTestSuite];
+//    NSUInteger count = testSuite.tests.count;
+//    for (int i = 0; i < count; ++i) {
+//        XCTest *test = testSuite.tests[i];
+//        NSLog(@"Test case count:%ld", test.testCaseCount);
+//        NSLog(@"Test name:%@", test.name);
+//        if (i == 1) {
+//            XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
+//            // run loop never out
+//            [test performTest:testRun];
+//            if (testRun.hasSucceeded) {
+//                NSLog(@"OK");
+//            } else {
+//                NSLog(@"NO");
+//            }
+//        }
+//    }
+//
 }
 
 - (void)tearDown {
@@ -79,6 +64,7 @@
 - (void)testExample {
     // Use recording to get started writing UI tests.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
     XCUIApplication *app = [[XCUIApplication alloc] init];
     
     // type query provider
@@ -171,7 +157,6 @@
     [app.buttons[@"Login"] tap];
     
     [app.alerts[@"Error"].buttons[@"OK"] tap];
-    
 }
 
 
@@ -319,6 +304,15 @@
     XCUIElement *staticText2 = [[[[mytableTable.cells containingType:XCUIElementTypeStaticText identifier:@"1"] childrenMatchingType:XCUIElementTypeStaticText] matchingIdentifier:@"1"] elementBoundByIndex:0];
     [staticText2 pressForDuration:2.1];
     [staticText2 swipeDown];
+    
+}
+
+- (void)testBundle {
+    // this code can not access resources in bundle
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"bundle" ofType:@"plist"];
+    NSDictionary *data = [NSDictionary dictionaryWithContentsOfFile:file];
+    NSLog(@"[Test] bundle data: %@", data);
+    [[[XCUIApplication alloc] init].scrollViews[@"MyScrollView"] tap];
     
 }
 

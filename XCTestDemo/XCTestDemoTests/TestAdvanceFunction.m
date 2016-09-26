@@ -25,32 +25,19 @@
     NSLog(@"%@", NSStringFromSelector(_cmd));
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
 
 - (void)testM1 {
     NSLog(@"TestM1");
-    
-    int n = 10 * rand() / (RAND_MAX + 1) + 1;
-    
-    XCTAssertTrue((n < 0), @"Test message!");
 }
 
 - (void)testM2 {
     NSLog(@"%@", NSStringFromSelector(_cmd));
-    [self waitForExpectationsWithTimeout:12 handler:^(NSError * _Nullable error) {
-        //
-    }];
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
+- (void)testPerformance {
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        //
+        NSLog(@"%@", NSStringFromSelector(_cmd));
     }];
 }
-
 @end

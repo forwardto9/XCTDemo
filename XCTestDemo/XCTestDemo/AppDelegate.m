@@ -17,6 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"bundle" ofType:@"plist"];
+    NSDictionary *data = [NSDictionary dictionaryWithContentsOfFile:file];
+    NSLog(@"[Application] bundle data: %@", data);
     return YES;
 }
 
