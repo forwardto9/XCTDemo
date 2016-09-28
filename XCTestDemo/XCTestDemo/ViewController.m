@@ -22,21 +22,23 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame     = CGRectMake(10, 80, 100, 44);
+    button.frame     = CGRectMake(10, 64, 100, 44);
     [button setTitle:@"MyButton" forState:UIControlStateNormal];
     [button setIsAccessibilityElement:YES];
+    button.backgroundColor = [UIColor lightGrayColor];
     button.accessibilityIdentifier = @"MButton";
     [button addTarget:self action:@selector(changeTitle:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
     
     
-    UIView *subView = [[UIView alloc] initWithFrame:CGRectMake(110, 80, self.view.bounds.size.width-110, 60)];
+    UIView *subView = [[UIView alloc] initWithFrame:CGRectMake(115, 64, self.view.bounds.size.width-120, 60)];
     subView.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:subView];
     
     UIButton *subViewButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    subViewButton.frame     = CGRectMake(0, 0, 60, 44);
+    subViewButton.frame     = CGRectMake(0, 8, 60, 44);
+    subViewButton.backgroundColor = [UIColor yellowColor];
     [subViewButton setTitle:@"SubBtn" forState:UIControlStateNormal];
     [subViewButton setIsAccessibilityElement:YES];
     subViewButton.accessibilityIdentifier = @"SubButton";
@@ -44,7 +46,18 @@
     [subView addSubview:subViewButton];
     
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 110, 100, 50)];
+    
+    UIButton *subViewButton1 = [UIButton buttonWithType:UIButtonTypeSystem];
+    subViewButton1.frame     = CGRectMake(70, 8, 60, 44);
+    subViewButton1.backgroundColor = [UIColor yellowColor];
+    [subViewButton1 setIsAccessibilityElement:NO];
+//    subViewButton1.accessibilityLabel = @"Button11";
+//    subViewButton1.accessibilityIdentifier = @"Button111";
+//    [subViewButton1 setTitle:@"Button1" forState:UIControlStateNormal];
+    [subViewButton1 addTarget:self action:@selector(changeSubTitle:) forControlEvents:UIControlEventTouchUpInside];
+    [subView addSubview:subViewButton1];
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 124, self.view.bounds.size.width, 100)];
     scrollView.delegate = self;
     scrollView.contentSize = CGSizeMake(100, 500);
     [scrollView setIsAccessibilityElement:YES];
@@ -54,7 +67,7 @@
     
     
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - 64)/2 + 60, self.view.bounds.size.width, (self.view.bounds.size.height/2) + 60) style:(UITableViewStylePlain)];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 120, self.view.bounds.size.width, 120) style:(UITableViewStylePlain)];
     [table registerClass:[UITableViewCell class] forCellReuseIdentifier:kTabelCellID];
     table.accessibilityIdentifier = @"MyTable";
     table.delegate = self;
@@ -109,7 +122,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 100;
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

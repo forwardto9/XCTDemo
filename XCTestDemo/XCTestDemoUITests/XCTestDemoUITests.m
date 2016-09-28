@@ -294,12 +294,14 @@
     
     
     XCUIElement *mytableTable = [[XCUIApplication alloc] init].tables[@"MyTable"];
+    
+    // UITable中寻找cell的方法就是通过staticTexts，key是cell.labelText.text
     XCUIElement *staticText = mytableTable.staticTexts[@"3"];
     [staticText pressForDuration:2];
     
     // 手势距离不定
     [staticText swipeUp];
-    [mytableTable.staticTexts[@"5"] swipeDown];
+    [mytableTable.staticTexts[@"2"] swipeDown];
     
     XCUIElement *staticText2 = [[[[mytableTable.cells containingType:XCUIElementTypeStaticText identifier:@"1"] childrenMatchingType:XCUIElementTypeStaticText] matchingIdentifier:@"1"] elementBoundByIndex:0];
     [staticText2 pressForDuration:2.1];
@@ -313,6 +315,48 @@
     NSDictionary *data = [NSDictionary dictionaryWithContentsOfFile:file];
     NSLog(@"[Test] bundle data: %@", data);
     [[[XCUIApplication alloc] init].scrollViews[@"MyScrollView"] tap];
+}
+
+- (void)testAllProcess{
+    
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"MButton"] tap];
+    [app.textFields[@"userName"] tap];
+    [app.textFields[@"userName"] typeText:@"username"];
+    
+    [app.textFields[@"password"] tap];
+    [app.textFields[@"password"] typeText:@"password"];
+    
+    XCUIElement *loginButton = app.buttons[@"Login"];
+    [loginButton tap];
+//    [app.buttons[@"Login"] tap];
+    
+    XCUIElement *switch2 = app.switches[@"switch"];
+    [switch2 tap];
+    [switch2 tap];
+    [app.navigationBars[@"SigninView"].buttons[@"My"] tap];
+    [app.buttons[@"SubButton"] tap];
+    
+}
+
+/**
+ 定位element的方法，注意：方法体可以为空
+ */
+- (void)testSubButton1 {
+    // if element property isAccessibilityElement is YES, identifier previllage is top then the label, then the staticText, last is MatchingType:
+//    [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
+//    XCUIElement *button11Button = [[XCUIApplication alloc] init].buttons[@"Button11"];
+//    [button11Button tap];
+//    [[[XCUIApplication alloc] init].buttons[@"Button1"] tap];
+    
+//    XCUIApplication *app = [[XCUIApplication alloc] init];
+//    [[[[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
+    
+//    otherwise title staticText is top,then ccessablitityIdentifier, then accessablitityLabel, then matchType:
+//    [[[XCUIApplication alloc] init].staticTexts[@"Button1"] tap];
+//    [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
+//    [[[XCUIApplication alloc] init].buttons[@"Button11"] tap];
+//    [[[[[[[[[[XCUIApplication alloc] init].otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
     
 }
 
