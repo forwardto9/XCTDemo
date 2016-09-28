@@ -344,13 +344,13 @@
  */
 - (void)testSubButton1 {
     // if element property isAccessibilityElement is YES, identifier previllage is top then the label, then the staticText, last is MatchingType:
-//    [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
-//    XCUIElement *button11Button = [[XCUIApplication alloc] init].buttons[@"Button11"];
-//    [button11Button tap];
-//    [[[XCUIApplication alloc] init].buttons[@"Button1"] tap];
+    [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
+    XCUIElement *button11Button = [[XCUIApplication alloc] init].buttons[@"Button11"];
+    [button11Button tap];
+    [[[XCUIApplication alloc] init].buttons[@"Button1"] tap];
     
-//    XCUIApplication *app = [[XCUIApplication alloc] init];
-//    [[[[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [[[[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
     
 //    otherwise title staticText is top,then ccessablitityIdentifier, then accessablitityLabel, then matchType:
 //    [[[XCUIApplication alloc] init].staticTexts[@"Button1"] tap];
@@ -359,5 +359,7 @@
 //    [[[[[[[[[[XCUIApplication alloc] init].otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
     
 }
+
+
 
 @end

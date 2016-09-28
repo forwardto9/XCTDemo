@@ -50,10 +50,10 @@
     UIButton *subViewButton1 = [UIButton buttonWithType:UIButtonTypeSystem];
     subViewButton1.frame     = CGRectMake(70, 8, 60, 44);
     subViewButton1.backgroundColor = [UIColor yellowColor];
-    [subViewButton1 setIsAccessibilityElement:NO];
-//    subViewButton1.accessibilityLabel = @"Button11";
-//    subViewButton1.accessibilityIdentifier = @"Button111";
-//    [subViewButton1 setTitle:@"Button1" forState:UIControlStateNormal];
+    [subViewButton1 setIsAccessibilityElement:YES];
+    subViewButton1.accessibilityLabel = @"Button11";
+    subViewButton1.accessibilityIdentifier = @"Button111";
+    [subViewButton1 setTitle:@"Button1" forState:UIControlStateNormal];
     [subViewButton1 addTarget:self action:@selector(changeSubTitle:) forControlEvents:UIControlEventTouchUpInside];
     [subView addSubview:subViewButton1];
     
