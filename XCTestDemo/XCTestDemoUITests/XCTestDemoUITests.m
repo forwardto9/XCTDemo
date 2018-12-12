@@ -347,7 +347,13 @@
     [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
     XCUIElement *button11Button = [[XCUIApplication alloc] init].buttons[@"Button11"];
     [button11Button tap];
-    [[[XCUIApplication alloc] init].buttons[@"Button1"] tap];
+    
+    XCUIElement *dammyButton = [[XCUIApplication alloc] init].buttons[@"Button1"];
+    if (dammyButton) {
+        [dammyButton tap];
+    } else {
+        NSLog(@"dammyButton is nil");
+    }
     
     XCUIApplication *app = [[XCUIApplication alloc] init];
     [[[[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];

@@ -22,7 +22,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame     = CGRectMake(10, 64, 100, 44);
+    button.frame     = CGRectMake(10, 84, 100, 44);
     [button setTitle:@"MyButton" forState:UIControlStateNormal];
     [button setIsAccessibilityElement:YES];
     button.backgroundColor = [UIColor lightGrayColor];
@@ -57,12 +57,12 @@
     [subViewButton1 addTarget:self action:@selector(changeSubTitle:) forControlEvents:UIControlEventTouchUpInside];
     [subView addSubview:subViewButton1];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 124, self.view.bounds.size.width, 100)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.origin.y + 150, self.view.bounds.size.width, 100)];
     scrollView.delegate = self;
     scrollView.contentSize = CGSizeMake(100, 500);
     [scrollView setIsAccessibilityElement:YES];
     scrollView.accessibilityIdentifier = @"MyScrollView";
-    scrollView.backgroundColor = [UIColor redColor];
+    scrollView.backgroundColor = [UIColor brownColor];
     [self.view addSubview:scrollView];
     
     
