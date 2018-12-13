@@ -32,28 +32,11 @@
     XCUIApplication *app = [[XCUIApplication alloc] init];
     [app launch];
     
+    // Unlike launch, a call to activate will not terminate the existing instance if the application is already running.
+//    [app activate];
+    
 //    [[XCUIApplication new] terminate];
     // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    
-    // suggest this part to be added into unit test
-//    XCTestSuite *testSuite = [XCTestDemoUITests defaultTestSuite];
-//    NSUInteger count = testSuite.tests.count;
-//    for (int i = 0; i < count; ++i) {
-//        XCTest *test = testSuite.tests[i];
-//        NSLog(@"Test case count:%ld", test.testCaseCount);
-//        NSLog(@"Test name:%@", test.name);
-//        if (i == 1) {
-//            XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
-//            // run loop never out
-//            [test performTest:testRun];
-//            if (testRun.hasSucceeded) {
-//                NSLog(@"OK");
-//            } else {
-//                NSLog(@"NO");
-//            }
-//        }
-//    }
-//
 }
 
 - (void)tearDown {
@@ -69,13 +52,10 @@
     
     // type query provider
     XCUIElementQuery *buttonQuery = app.buttons;
-    
-    
-    
+
     NSLog(@"button count : %ld", buttonQuery.count);
     
     XCUIElement *button1 = [buttonQuery elementBoundByIndex:0];
-    
     [button1 tap];
     
     XCUIElementQuery *textFieldQuery = app.textFields;
@@ -83,16 +63,11 @@
     
     // 此处存在错误，就是XCUIElementQuery如果被new出来，这个实例没有跟任何的app instance关联，也就不知道在哪里找UI element
 //    XCUIElementQuery *typeQuery = [[[XCUIElementQuery alloc] init] childrenMatchingType:(XCUIElementTypeTextField)];
-    
     NSLog(@"app elements count = %ld", app.otherElements.count);
-    
-    
     for (int i = 0; i < app.otherElements.count; i++) {
         XCUIElement *element = [app.otherElements elementBoundByIndex:i];
         NSLog(@"Element type = %ld", element.elementType);
     }
-    
-    
 //    rather than calling [query descendantsMatchingType: XCUIElementTypeButton], you can use the buttons property from the protocol to retrieve query.buttons
     XCUIElementQuery *buttonTypeQuery = [app.otherElements childrenMatchingType:(XCUIElementTypeButton)];
     NSLog(@"buttonTypeQuery count:%ld", buttonTypeQuery.count);
@@ -104,9 +79,6 @@
 //    Get number of matches for: Children matching type Button
 //    Find: Descendants matching type Other
 //    Find: Children matching type Button
-    
-    
-    
 //    XCUIElementQuery *typeQuery = [app.otherElements childrenMatchingType:(XCUIElementTypeTextField)];
     XCUIElementQuery *textFieldTypeQuery = [app.otherElements descendantsMatchingType:(XCUIElementTypeTextField)];
     NSLog(@"typeQuery count:%ld", textFieldTypeQuery.count);
@@ -140,14 +112,23 @@
     // 通过identifier的谓词，从buttons中锁定某一button
     XCUIElement *button2 = [buttonQuery elementMatchingPredicate:[NSPredicate predicateWithFormat:@"'Login' in identifiers"]];
     [button2 tap];
-    
 }
 
-
+id<NSObject>uiinterruption = nil;
 - (void)testEmptyNameAndPassword {
     
     XCUIApplication *app = [[XCUIApplication alloc] init];
-    
+    __weak typeof(self) weakSelf = self;
+    // 可用于测试系统级 alert 的终端处理，Block 中必须要与UI交互
+    uiinterruption = [self addUIInterruptionMonitorWithDescription:@"login" handler:^BOOL(XCUIElement * _Nonnull interruptingElement) {
+        //    [app.alerts[@"Error"].buttons[@"OK"] tap];
+        // 等同于以下代码
+        [interruptingElement.buttons[@"OK"] tap];
+        
+        [weakSelf removeUIInterruptionMonitor:uiinterruption];
+        
+        return YES;
+    }];
     // XCode检索控件的方法
     //    XCUIElement *textField = [[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeTextField] elementBoundByIndex:0];
     
@@ -155,8 +136,11 @@
 //    [app.buttons[@"userLogin"] tap];
     // 2. 使用button的title作为key检索button
     [app.buttons[@"Login"] tap];
+    // 放到中断中处理
+    //    [app.alerts[@"Error"].buttons[@"OK"] tap];
     
-    [app.alerts[@"Error"].buttons[@"OK"] tap];
+    // 这一步是测试addUIInterruptionMonitorWithDescription方法必备的调用
+    [app tap];
 }
 
 
@@ -178,15 +162,25 @@
     XCUIElement *loginButton = app.buttons[@"Login"];
     [loginButton tap];
     [app.navigationBars[@"SigninView"].buttons[@"Login"] tap];
-    
-    
 }
 
 
-- (void)testSwitchAndCount {
-    
+- (void)testSwitchWithStatus {
     XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"MButton"] tap];
+    [app.textFields[@"userName"] tap];
+    [app.textFields[@"userName"] typeText:@"username"];
+    
+    [app.textFields[@"password"] tap];
+    [app.textFields[@"password"] typeText:@"password"];
+    
+    XCUIElement *loginButton = app.buttons[@"Login"];
+    [loginButton tap];
+    // 以上步骤是进到 Switch 对应的界面
+    
+    // 找到状态为0的switch
     XCUIElement *switch2 = app.switches[@"0"];
+    // 此步之后， Switch 的状态是 1
     [switch2 tap];
     
     XCUIElement *timeLabel = app.staticTexts[@"timesLabel"];
@@ -198,19 +192,31 @@
     [switch2 tap];
     [switch3 tap];
     [switch2 tap];
-    [app.navigationBars[@"SigninView"].buttons[@"Login"] tap];
-    
+    [app.navigationBars[@"SigninView"].buttons[@"My"] tap];
 }
 
 
 - (void)testSwitchWithID {
-    
     XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"MButton"] tap];
+    [app.textFields[@"userName"] tap];
+    [app.textFields[@"userName"] typeText:@"username"];
+    
+    [app.textFields[@"password"] tap];
+    [app.textFields[@"password"] typeText:@"password"];
+    
+    XCUIElement *loginButton = app.buttons[@"Login"];
+    [loginButton tap];
+    // 以上步骤是进到 Switch 对应的界面
+    
+    
     XCUIElement *switch2 = app.switches[@"switch"];
     [switch2 tap];
     [switch2 tap];
-    [app.navigationBars[@"SigninView"].buttons[@"Login"] tap];
     
+    [app.navigationBars[@"SigninView"].buttons[@"My"] tap];
+    // 因为navigationBars的返回键的button staticText 是 “My” 而不是 “Login”
+//    [app.navigationBars[@"SigninView"].buttons[@"Login"] tap];
 }
 
 - (void)testMyButtonEvent {
@@ -235,9 +241,6 @@
 #endif
     
     [device pressButton:XCUIDeviceButtonHome];
-    
-    
-    
 }
 
 - (void)testSubViewButton {
@@ -260,7 +263,6 @@
 //    XCUICoordinate *end = [myScroll coordinateWithNormalizedOffset:CGVectorMake(0, 124)];
 //    [start pressForDuration:0.1 thenDragToCoordinate:end];
 
-    
     XCUIElement *myscrollviewScrollView = [[XCUIApplication alloc] init].scrollViews[@"MyScrollView"];
     [myscrollviewScrollView swipeUp];
     [myscrollviewScrollView pressForDuration:1.4];
@@ -280,18 +282,19 @@
     
     XCUIElementQuery *tablesQuery = [[XCUIApplication alloc] init].tables;
     [tablesQuery.staticTexts[@"1"] swipeUp];
-    XCUIElement *staticText1 = tablesQuery.staticTexts[@"2"];
-    [staticText1 swipeUp];
-    [staticText1 swipeDown];
-    [staticText1 swipeUp];
-    [staticText1 swipeDown];
     
+    // visible frame is empty, which may happen if the element is offscreen.
+    // 以下会执行失败，因为看不到为2的这一行
+//    XCUIElement *staticText1 = tablesQuery.staticTexts[@"2"];
+//    [staticText1 swipeUp];
+//    [staticText1 swipeDown];
+//    [staticText1 swipeUp];
+//    [staticText1 swipeDown];
     
     // 手势距离固定
     XCUICoordinate *start = [tablesQuery.staticTexts[@"1"] coordinateWithNormalizedOffset:CGVectorMake(0, 0)];
     XCUICoordinate *end = [tablesQuery.staticTexts[@"1"] coordinateWithNormalizedOffset:CGVectorMake(0, 10)];
     [start pressForDuration:3 thenDragToCoordinate:end];
-    
     
     XCUIElement *mytableTable = [[XCUIApplication alloc] init].tables[@"MyTable"];
     
@@ -301,7 +304,10 @@
     
     // 手势距离不定
     [staticText swipeUp];
-    [mytableTable.staticTexts[@"2"] swipeDown];
+    
+    // visible frame is empty, which may happen if the element is offscreen.
+    // 以下会执行失败，因为看不到为2的这一行
+//    [mytableTable.staticTexts[@"2"] swipeDown];
     
     XCUIElement *staticText2 = [[[[mytableTable.cells containingType:XCUIElementTypeStaticText identifier:@"1"] childrenMatchingType:XCUIElementTypeStaticText] matchingIdentifier:@"1"] elementBoundByIndex:0];
     [staticText2 pressForDuration:2.1];
@@ -329,7 +335,6 @@
     
     XCUIElement *loginButton = app.buttons[@"Login"];
     [loginButton tap];
-//    [app.buttons[@"Login"] tap];
     
     XCUIElement *switch2 = app.switches[@"switch"];
     [switch2 tap];
@@ -343,27 +348,18 @@
  定位element的方法，注意：方法体可以为空
  */
 - (void)testSubButton1 {
-    // if element property isAccessibilityElement is YES, identifier previllage is top then the label, then the staticText, last is MatchingType:
+    // if element property isAccessibilityElement is YES, identifier previllage is top then the label, then the staticText, last is MatchingType
     [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
-    XCUIElement *button11Button = [[XCUIApplication alloc] init].buttons[@"Button11"];
-    [button11Button tap];
-    
-    XCUIElement *dammyButton = [[XCUIApplication alloc] init].buttons[@"Button1"];
-    if (dammyButton) {
-        [dammyButton tap];
-    } else {
-        NSLog(@"dammyButton is nil");
-    }
-    
-    XCUIApplication *app = [[XCUIApplication alloc] init];
-    [[[[[[[[app.otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
+    [[[XCUIApplication alloc] init].buttons[@"Button11"] tap];
+    // Button1 是staticText，有相对应的方法，不能按照id相关的方式
+//    [[[XCUIApplication alloc] init].buttons[@"Button1"] tap];
+    [[[XCUIApplication alloc] init].staticTexts[@"Button1"] tap];
     
 //    otherwise title staticText is top,then ccessablitityIdentifier, then accessablitityLabel, then matchType:
 //    [[[XCUIApplication alloc] init].staticTexts[@"Button1"] tap];
 //    [[[XCUIApplication alloc] init].buttons[@"Button111"] tap];
 //    [[[XCUIApplication alloc] init].buttons[@"Button11"] tap];
 //    [[[[[[[[[[XCUIApplication alloc] init].otherElements containingType:XCUIElementTypeNavigationBar identifier:@"Login"] childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeOther].element childrenMatchingType:XCUIElementTypeButton] elementBoundByIndex:1] tap];
-    
 }
 
 

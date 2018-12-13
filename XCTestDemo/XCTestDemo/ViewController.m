@@ -50,7 +50,8 @@
     UIButton *subViewButton1 = [UIButton buttonWithType:UIButtonTypeSystem];
     subViewButton1.frame     = CGRectMake(70, 8, 60, 44);
     subViewButton1.backgroundColor = [UIColor yellowColor];
-    [subViewButton1 setIsAccessibilityElement:YES];
+    // 导致UI Test 中查询UI元素的标识优先级不同
+    [subViewButton1 setIsAccessibilityElement:NO];
     subViewButton1.accessibilityLabel = @"Button11";
     subViewButton1.accessibilityIdentifier = @"Button111";
     [subViewButton1 setTitle:@"Button1" forState:UIControlStateNormal];
@@ -82,7 +83,7 @@
 }
 
 - (void)changeSubTitle:(UIButton *)sender {
-    self.navigationItem.title = @"subView";
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld", random()];
 }
 
 - (void)didReceiveMemoryWarning {

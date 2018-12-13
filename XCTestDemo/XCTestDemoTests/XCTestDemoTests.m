@@ -37,11 +37,39 @@
 
 @end
 
+@interface XCMyTestRun : XCTestRun
+@end
+
+@implementation XCMyTestRun
+
+- (instancetype)initWithTest:(XCTest *)test {
+    if ([super initWithTest:test]) {
+    }
+    return self;
+}
+
+- (void)start {
+    [super start];
+    NSLog(@"XCMyTestRun %@", NSStringFromSelector(_cmd));
+    sleep(2);
+}
+
+- (void)stop {
+    [super stop];
+    NSLog(@"XCMyTestRun %@", NSStringFromSelector(_cmd));
+}
+
+@end
+
 @interface XCMyTestCase : XCTestCase<XCTestObservation>
 @property BOOL isFinished;
 @end
 
 @implementation XCMyTestCase
+
++ (Class)testRunClass {
+    return [XCMyTestRun class];
+}
 
 // 在每一个test方法开始前，自定义条件
 //- (void)setUp {
@@ -70,13 +98,6 @@
 }
 
 - (void)testMyMethod1 {
-    NSLog(@"%s", __FUNCTION__);
-    [self addTeardownBlock:^{
-        NSLog(@"addTeardownBlock1");
-    }];
-}
-
-- (void)testMyMethod2 {
     NSLog(@"%s", __FUNCTION__);
     NSObject *obj = nil;
     XCTAssertNotNil(obj, "obj is nil");
@@ -197,13 +218,18 @@
     [self waitInfoOfExpectation:expectation];
 }
 
-
-- (void)testCaseWillStart:(XCTestCase *)testCase {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+#pragma mark - Creating Tests Programmatically
+- (void)testTestProgrammatically {
+    NSLog(@"%s", __FUNCTION__);
+    // 可以在运行时调用Case中自定义的方法，同样提供NSInvocation实例参数的方法
+    XCMyTestCase *testCase = [[XCMyTestCase alloc] initWithSelector:@selector(runtimeMethod)];
+    [testCase invokeTest];
 }
-
-- (void)testCaseDidFinish:(XCTestCase *)testCase {
+- (void)runtimeMethod {
     NSLog(@"%@", NSStringFromSelector(_cmd));
+    
+    // 查询 Test Case 中全部带有test前缀的自定义方法
+    NSLog(@"%@", [[XCMyTestCase defaultTestSuite] tests]);
 }
 
 - (void)waitInfoOfExpectation:(XCTestExpectation *)expectation {
@@ -232,36 +258,19 @@
     NSLog(@"%@ status = %@", NSStringFromClass([expectation class]), resultDescription);
 }
 
-@end
-
-@interface XCMyTestSuite : XCTestSuite<XCTestObservation>
-
-@end
-
-@implementation XCMyTestSuite
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self = [XCMyTestSuite defaultTestSuite];
-        [[XCTestObservationCenter sharedTestObservationCenter] addTestObserver:self];
-    }
-    return self;
+// 监控 Test Case 执行情况
+#pragma mark - XCTestObservation
+- (void)testCaseWillStart:(XCTestCase *)testCase {
+    NSLog(@"%s", __FUNCTION__);
 }
 
-
-- (void)testSuiteWillStart:(XCTestSuite *)testSuite {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-}
-
-- (void)testSuiteDidFinish:(XCTestSuite *)testSuite {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
+- (void)testCaseDidFinish:(XCTestCase *)testCase {
+    NSLog(@"%s", __FUNCTION__);
 }
 
 @end
 
-
-
-@interface XCTestDemoTests : XCTestCase<XCTestObservation> {
+@interface XCTestDemoTests : XCTestCase {
     
 @private
     ViewController *vc;
@@ -286,42 +295,34 @@
 - (void)testExample {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+}
+
+#pragma mark - Test Suite
+// 根据已知 test case，构造自定义的 test suite，并执行 test case 中的自定义方法
+- (void)testCustomSuite {
+//    XCTestSuite *customSuite = [XCTestSuite testSuiteForTestCaseClass:[XCMyTestCase class]]; // ok
+//    XCTestSuite *customSuite = [XCTestSuite testSuiteForTestCaseWithName:@"XCMyTestCase"]; //ok
     
-//    XCMyTestSuite *testSuite = [[XCMyTestSuite alloc] init]; // not working
+    //    NSString *bPath = [[NSBundle mainBundle] bundlePath];
+    //    XCTestSuite *testSuite = [XCTestSuite testSuiteForBundlePath:bPath]; // not working
     
-    
-    
-    
-//    XCTestSuite *testSuite = [XCTestDemoTests defaultTestSuite]; // ok
+    XCTestSuite *customSuite = [[XCTestSuite alloc] initWithName:@"CustomSuite"];
+    XCMyTestCase *testCase = [[XCMyTestCase alloc] initWithSelector:@selector(runtimeMethod)];
     
     // 这个方式可以从测试文件中加载测试case，然后执行。
-//    XCTestSuite *testSuite = [TestAdvanceFunction defaultTestSuite]; // ok
-//    XCTestSuite *testSuite = [XCTestSuite testSuiteForTestCaseClass:[XCMyTestCase class]]; // ok
-    XCTestSuite *testSuite = [XCTestSuite testSuiteForTestCaseWithName:@"XCMyTestCase"]; //ok
-    
-//    NSString *bPath = [[NSBundle mainBundle] bundlePath];
-//    XCTestSuite *testSuite = [XCTestSuite testSuiteForBundlePath:bPath]; // not working
-    NSUInteger count = testSuite.tests.count;
-    for (int i = 0; i < count; ++i) {
-        XCTest *test = testSuite.tests[i];
-        NSLog(@"Test method[%d]:%@", i, test.name);
-        if (i == 0) {
-            //            [test runTest];
-            //            [[test testRun] start];
-            //            [[test testRun] stop];
-            
-        }
-        
-        //            XCTestRun *testRun = [[XCTestRun alloc] initWithTest:test];
-        XCTestRun *testRun = [XCTestRun testRunWithTest:test];
-        
-//        [testRun start]; // not working
-        [test performTest:testRun];
-        if (testRun.hasSucceeded) {
-            NSLog(@"OK");
-        } else {
-            NSLog(@"NO");
-        }
+//    XCTestSuite *customSuite = [TestAdvanceFunction defaultTestSuite];
+//    TestAdvanceFunction *testCase = [[TestAdvanceFunction alloc] initWithSelector:@selector(runtimeMethod)];
+    [customSuite addTest:testCase];
+    for (XCTest *test in customSuite.tests) {
+        // XCTestRun 用来收集信息， start or stop，用来自定义testRun的执行，不会执行 test case，如果没有特定需求，不需要调用
+        // 系统 TestRun
+//        XCTestRun *testRun = [XCTestRun testRunWithTest:test];
+        // 自定义TestRun 需要注意 TestCase 类中的雷属性 testRunClass 的返回x类型
+        XCMyTestRun *testRun = [XCMyTestRun testRunWithTest:test];
+        // 执行case
+         [test performTest:testRun];
+        NSLog(@"%@", testRun.hasSucceeded ? @"success":@"failed");
+        NSLog(@"%@   %@",  testRun.startDate, testRun.stopDate);
     }
 }
 
@@ -344,14 +345,6 @@
     XCTAssertNotNil(data);
     XCTAssertNil([data objectForKey:@"key"]);
     NSLog(@"[Test] bundle data: %@", data);
-}
-
-- (void)testCaseWillStart:(XCTestCase *)testCase {
-    NSLog(@"%s", __FUNCTION__);
-}
-
-- (void)testCaseDidFinish:(XCTestCase *)testCase {
-    NSLog(@"%s", __FUNCTION__);
 }
 
 @end

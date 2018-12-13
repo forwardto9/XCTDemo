@@ -215,6 +215,7 @@
 				TargetAttributes = {
 					C29D33901D92288500C78256 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 299MFJ63GP;
 						ProvisioningStyle = Manual;
 					};
 					C29D33A91D92288500C78256 = {
@@ -455,12 +456,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 299MFJ63GP;
 				INFOPLIST_FILE = XCTestDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.teg.XCTestDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = common_dev;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;

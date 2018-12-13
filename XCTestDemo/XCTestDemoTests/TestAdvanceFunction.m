@@ -22,11 +22,10 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-    NSLog(@"%@", NSStringFromSelector(_cmd));
 }
 
-
 - (void)testM1 {
+    sleep(1);
     NSLog(@"TestM1");
 }
 
@@ -34,10 +33,16 @@
     NSLog(@"%@", NSStringFromSelector(_cmd));
 }
 
-- (void)testPerformance {
-    [self measureBlock:^{
-        //
-        NSLog(@"%@", NSStringFromSelector(_cmd));
-    }];
+- (void)runtimeMethod {
+    NSLog(@"%@", NSStringFromSelector(_cmd));
 }
+
+- (void)testCaseWillStart:(XCTestCase *)testCase {
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)testCaseDidFinish:(XCTestCase *)testCase {
+    NSLog(@"%s", __FUNCTION__);
+}
+
 @end
